@@ -5,7 +5,6 @@ public class Client {
     private int id;
     private String name;
     private String surname;
-    private List<BorrowedBook> borrowedBooks;
 
     public Client() {
     }
@@ -14,7 +13,6 @@ public class Client {
         this.id = id;
         this.name = name;
         this.surname = surname;
-        this.borrowedBooks = new ArrayList<>();
     }
 
     public int getId() {
@@ -41,21 +39,12 @@ public class Client {
         this.surname = surname;
     }
 
-    public List<BorrowedBook> getBorrowedBooks() {
-        return borrowedBooks;
-    }
-
-    public void setBorrowedBooks(List<BorrowedBook> borrowedBooks) {
-        this.borrowedBooks = borrowedBooks;
-    }
-
     @Override
     public String toString() {
         return "Client{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", borrowedBooks=" + borrowedBooks +
                 '}';
     }
 }
