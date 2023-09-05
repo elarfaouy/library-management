@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+package model;
 
 public class Client {
     private int id;
@@ -41,7 +40,7 @@ public class Client {
 
     @Override
     public String toString() {
-        return "Client{" +
+        return "model.Client{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +

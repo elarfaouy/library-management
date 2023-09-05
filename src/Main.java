@@ -1,3 +1,9 @@
+import enums.BookStatus;
+import model.Author;
+import model.Book;
+import model.BorrowedBook;
+import model.Client;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -26,16 +32,16 @@ public class Main {
         BorrowedBook borrowedBook2 = new BorrowedBook(currentDate, null, dueDate2, book2, client2);
         BorrowedBook borrowedBook3 = new BorrowedBook(currentDate, null, dueDate1, book3, client3);
 
-        System.out.println("Book 1 Info: " + book1.toString());
-        System.out.println("Book 2 Info: " + book2.toString());
-        System.out.println("Book 3 Info: " + book3.toString());
-        System.out.println("Author 1 Info: " + author1.toString());
-        System.out.println("Author 2 Info: " + author2.toString());
-        System.out.println("Client 1 Info: " + client1.toString());
-        System.out.println("Client 2 Info: " + client2.toString());
-        System.out.println("Client 3 Info: " + client3.toString());
-        System.out.println("Borrowed Book 1 Info: " + borrowedBook1.toString());
-        System.out.println("Borrowed Book 2 Info: " + borrowedBook2.toString());
-        System.out.println("Borrowed Book 3 Info: " + borrowedBook3.toString());
+        System.out.println("model.Book 1 Info: " + book1.toString());
+        System.out.println("model.Book 2 Info: " + book2.toString());
+        System.out.println("model.Book 3 Info: " + book3.toString());
+        System.out.println("model.Author 1 Info: " + author1.toString());
+        System.out.println("model.Author 2 Info: " + author2.toString());
+        System.out.println("model.Client 1 Info: " + client1.toString());
+        System.out.println("model.Client 2 Info: " + client2.toString());
+        System.out.println("model.Client 3 Info: " + client3.toString());
+        System.out.println("Borrowed model.Book 1 Info: " + borrowedBook1.toString());
+        System.out.println("Borrowed model.Book 2 Info: " + borrowedBook2.toString());
+        System.out.println("Borrowed model.Book 3 Info: " + borrowedBook3.toString());
     }
 }

@@ -1,3 +1,7 @@
+package model;
+
+import enums.BookStatus;
+
 public class Book {
     private String isbn;
     private String title;
@@ -68,7 +72,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book{" +
+        return "model.Book{" +
                 "isbn='" + isbn + '\'' +
                 ", title='" + title + '\'' +
                 ", status='" + status + '\'' +
