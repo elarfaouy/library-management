@@ -13,4 +13,13 @@ public enum BookStatus {
     public String toString() {
         return status;
     }
+
+    public static BookStatus fromString(String status) {
+        for (BookStatus bookStatus : values()) {
+            if (bookStatus.status.equalsIgnoreCase(status)) {
+                return bookStatus;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant with status: " + status);
+    }
 }

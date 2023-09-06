@@ -8,18 +8,18 @@ public class Book {
     private BookStatus status;
     private int quantity;
     private int quantityLost;
-    private int idAuthor;
+    private Author author;
 
     public Book() {
     }
 
-    public Book(String isbn, String title, BookStatus status, int quantity, int quantityLost, int idAuthor) {
+    public Book(String isbn, String title, BookStatus status, int quantity, int quantityLost, Author author) {
         this.isbn = isbn;
         this.title = title;
         this.status = status;
         this.quantity = quantity;
         this.quantityLost = quantityLost;
-        this.idAuthor = idAuthor;
+        this.author = author;
     }
 
     public String getIsbn() {
@@ -62,23 +62,23 @@ public class Book {
         this.quantityLost = quantityLost;
     }
 
-    public int getIdAuthor() {
-        return idAuthor;
+    public Author getAuthor() {
+        return author;
     }
 
-    public void setIdAuthor(int idAuthor) {
-        this.idAuthor = idAuthor;
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     @Override
     public String toString() {
-        return "domain.model.Book{" +
+        return "Book{" +
                 "isbn='" + isbn + '\'' +
                 ", title='" + title + '\'' +
-                ", status='" + status + '\'' +
+                ", status=" + status +
                 ", quantity=" + quantity +
                 ", quantityLost=" + quantityLost +
-                ", idAuthor=" + idAuthor +
+                ", author=" + author +
                 '}';
     }
 }

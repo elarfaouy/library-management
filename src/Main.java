@@ -1,16 +1,23 @@
+import domain.enums.BookStatus;
 import repository.ClientDAO;
+import service.BookService;
 import util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class Main {
-    public static void main(String[] args) {
-        try {
+    public static void main(String[] args) throws SQLException {
+
+//        try {
             Connection connection = DatabaseConnection.getConnection();
 
-            ClientDAO clientDAO = new ClientDAO(connection);
+            BookService bookService = new BookService(connection);
 
+            bookService.BookMenu();
+//
+//            ClientDAO clientDAO = new ClientDAO(connection);
+//
 //            Client newClient = new Client();
 //            newClient.setName("Jane");
 //            newClient.setSurname("Smith");
@@ -36,11 +43,11 @@ public class Main {
 //            boolean exists = clientDAO.checkClientExists("Jane", "Smith");
 //            if (exists) System.out.println("Client exists.");
 //            else System.out.println("Client does not exist.");
-
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//
+//            connection.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
 
 

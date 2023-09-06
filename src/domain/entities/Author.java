@@ -8,7 +8,6 @@ public class Author {
     private int id;
     private String name;
     private String surname;
-    private List<Book> books;
 
     public Author() {
     }
@@ -17,7 +16,6 @@ public class Author {
         this.id = id;
         this.name = name;
         this.surname = surname;
-        this.books = new ArrayList<>();
     }
 
     public int getId() {
@@ -44,21 +42,12 @@ public class Author {
         this.surname = surname;
     }
 
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
     @Override
     public String toString() {
         return "domain.model.Author{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", books=" + books +
                 '}';
     }
 
