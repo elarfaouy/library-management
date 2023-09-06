@@ -1,16 +1,60 @@
+import dao.AuthorDAO;
+import dao.ClientDAO;
 import enums.BookStatus;
 import model.Author;
 import model.Book;
 import model.BorrowedBook;
 import model.Client;
+import util.DatabaseConnection;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        Author author1 = new Author(1, "John", "Doe");
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+
+            ClientDAO clientDAO = new ClientDAO(connection);
+
+//            Client newClient = new Client();
+//            newClient.setName("Jane");
+//            newClient.setSurname("Smith");
+//            Client insertedClient = clientDAO.insert(newClient);
+//            System.out.println("Inserted Client: " + insertedClient.toString());
+//
+//            Client updateClient = clientDAO.getFirstClient();
+//            updateClient.setName("Jane");
+//            updateClient.setSurname("Smith");
+//            Client updatedClient = clientDAO.update(updateClient);
+//            System.out.println("Updated Client: " + updatedClient.toString());
+//
+//            int clientIdToDelete = 13;
+//            boolean isDeleted = clientDAO.delete(clientIdToDelete);
+//            System.out.println("Client " + clientIdToDelete + " Deletion Status: " + isDeleted);
+//
+//            List<Client> allClients = clientDAO.getAllClients();
+//            System.out.println("All Clients:");
+//            for (Client client : allClients) {
+//                System.out.println(client.toString());
+//            }
+//
+//            boolean exists = clientDAO.checkClientExists("Jane", "Smith");
+//            if (exists) System.out.println("Client exists.");
+//            else System.out.println("Client does not exist.");
+
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+        /*Author author1 = new Author(1, "John", "Doe");
         Author author2 = new Author(2, "Jane", "Smith");
 
         Book book1 = new Book("ISBN-12-345", "The Great Novel", BookStatus.AVAILABLE, 50, 0, author1.getId());
@@ -42,6 +86,6 @@ public class Main {
         System.out.println("model.Client 3 Info: " + client3.toString());
         System.out.println("Borrowed model.Book 1 Info: " + borrowedBook1.toString());
         System.out.println("Borrowed model.Book 2 Info: " + borrowedBook2.toString());
-        System.out.println("Borrowed model.Book 3 Info: " + borrowedBook3.toString());
+        System.out.println("Borrowed model.Book 3 Info: " + borrowedBook3.toString());*/
     }
 }
