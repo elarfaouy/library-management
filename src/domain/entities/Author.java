@@ -1,4 +1,4 @@
-package model;
+package domain.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class Author {
 
     @Override
     public String toString() {
-        return "model.Author{" +
+        return "domain.model.Author{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +

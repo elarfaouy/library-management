@@ -1,6 +1,6 @@
-package model;
+package domain.entities;
 
-import enums.BookStatus;
+import domain.enums.BookStatus;
 
 public class Book {
     private String isbn;
@@ -72,7 +72,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return "model.Book{" +
+        return "domain.model.Book{" +
                 "isbn='" + isbn + '\'' +
                 ", title='" + title + '\'' +
                 ", status='" + status + '\'' +

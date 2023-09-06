@@ -1,6 +1,6 @@
-package dao;
+package repository;
 
-import model.Client;
+import domain.entities.Client;
 
 import java.sql.*;
 import java.util.ArrayList;

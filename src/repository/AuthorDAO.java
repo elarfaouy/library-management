@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 public class AuthorDAO {
 }

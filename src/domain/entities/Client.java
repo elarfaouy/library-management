@@ -1,4 +1,4 @@
-package model;
+package domain.entities;
 
 public class Client {
     private int id;
@@ -40,7 +40,7 @@ public class Client {
 
     @Override
     public String toString() {
-        return "model.Client{" +
+        return "domain.model.Client{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +

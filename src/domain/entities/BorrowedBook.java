@@ -1,4 +1,4 @@
-package model;
+package domain.entities;
 
 import java.util.Date;
 
@@ -62,7 +62,7 @@ public class BorrowedBook {
 
     @Override
     public String toString() {
-        return "model.BorrowedBook{" +
+        return "domain.model.BorrowedBook{" +
                 "borrowDate=" + borrowDate +
                 ", returnDate=" + returnDate +
                 ", dueDate=" + dueDate +

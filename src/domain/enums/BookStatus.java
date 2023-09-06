@@ -1,4 +1,4 @@
-package enums;
+package domain.enums;
 
 public enum BookStatus {
     AVAILABLE("available"), ON_LOAN("on loan"), LOST("lost");

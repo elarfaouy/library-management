@@ -53,7 +53,7 @@ INSERT INTO clients (name, surname) VALUES
     ('James', 'Anderson');
 
 INSERT INTO books (isbn, title, status, quantity, quantity_lost, author_id) VALUES
-    ('ISBN-001', 'The model.Book of Java', 'available', 50, 0, 1),
+    ('ISBN-001', 'The domain.entities.Book of Java', 'available', 50, 0, 1),
     ('ISBN-002', 'Python Programming', 'on loan', 30, 5, 2),
     ('ISBN-003', 'SQL Mastery', 'available', 20, 0, 3),
     ('ISBN-004', 'JavaScript Essentials', 'lost', 10, 2, 1),

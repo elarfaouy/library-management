@@ -1,17 +1,8 @@
-import dao.AuthorDAO;
-import dao.ClientDAO;
-import enums.BookStatus;
-import model.Author;
-import model.Book;
-import model.BorrowedBook;
-import model.Client;
+import repository.ClientDAO;
 import util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -76,16 +67,16 @@ public class Main {
         BorrowedBook borrowedBook2 = new BorrowedBook(currentDate, null, dueDate2, book2, client2);
         BorrowedBook borrowedBook3 = new BorrowedBook(currentDate, null, dueDate1, book3, client3);
 
-        System.out.println("model.Book 1 Info: " + book1.toString());
-        System.out.println("model.Book 2 Info: " + book2.toString());
-        System.out.println("model.Book 3 Info: " + book3.toString());
-        System.out.println("model.Author 1 Info: " + author1.toString());
-        System.out.println("model.Author 2 Info: " + author2.toString());
-        System.out.println("model.Client 1 Info: " + client1.toString());
-        System.out.println("model.Client 2 Info: " + client2.toString());
-        System.out.println("model.Client 3 Info: " + client3.toString());
-        System.out.println("Borrowed model.Book 1 Info: " + borrowedBook1.toString());
-        System.out.println("Borrowed model.Book 2 Info: " + borrowedBook2.toString());
-        System.out.println("Borrowed model.Book 3 Info: " + borrowedBook3.toString());*/
+        System.out.println("domain.model.Book 1 Info: " + book1.toString());
+        System.out.println("domain.model.Book 2 Info: " + book2.toString());
+        System.out.println("domain.model.Book 3 Info: " + book3.toString());
+        System.out.println("domain.model.Author 1 Info: " + author1.toString());
+        System.out.println("domain.model.Author 2 Info: " + author2.toString());
+        System.out.println("domain.model.Client 1 Info: " + client1.toString());
+        System.out.println("domain.model.Client 2 Info: " + client2.toString());
+        System.out.println("domain.model.Client 3 Info: " + client3.toString());
+        System.out.println("Borrowed domain.model.Book 1 Info: " + borrowedBook1.toString());
+        System.out.println("Borrowed domain.model.Book 2 Info: " + borrowedBook2.toString());
+        System.out.println("Borrowed domain.model.Book 3 Info: " + borrowedBook3.toString());*/
     }
 }
