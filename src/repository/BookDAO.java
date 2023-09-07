@@ -124,4 +124,39 @@ public class BookDAO {
         return rowsAffected == 1;
     }
 
+    public List<Book> searchByBookOrAuthor(String string) throws SQLException {
+        List<Book> books = new ArrayList<>();
+
+        String query = "SELECT b.* " +
+                "FROM books AS b " +
+                "INNER JOIN authors AS a " +
+                "ON b.author_id = a.id " +
+                "WHERE b.title LIKE ?" +
+                "OR CONCAT(a.name, a.surname) LIKE ?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, "%" + string + "%");
+        preparedStatement.setString(2, "%" + string + "%");
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            String isbn = resultSet.getString(1);
+            String title = resultSet.getString(2);
+            String statusStr = resultSet.getString(3);
+            BookStatus status = BookStatus.fromString(statusStr);
+            int quantity = resultSet.getInt(4);
+            int quantityLost = resultSet.getInt(5);
+
+            // TODO : when complete author dao, I need to get object of author for that id
+            int author_id = resultSet.getInt(6);
+            Author author = new Author();
+            author.setId(author_id);
+
+            Book book = new Book(isbn, title, status, quantity, quantityLost, author);
+
+            books.add(book);
+        }
+
+        return books;
+    }
 }

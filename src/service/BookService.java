@@ -26,7 +26,8 @@ public class BookService {
             System.out.println("2. Add a Book");
             System.out.println("3. Update a Book");
             System.out.println("4. Delete a Book");
-            System.out.println("5. Exit");
+            System.out.println("5. Search a Book");
+            System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
             int choice = Integer.parseInt(scanner.nextLine());
@@ -45,6 +46,9 @@ public class BookService {
                     deleteBook();
                     break;
                 case 5:
+                    searchBook();
+                    break;
+                case 0:
                     System.out.println("Exiting...");
                     return;
                 default:
@@ -56,6 +60,20 @@ public class BookService {
     public void listAllBooks() {
         try {
             List<Book> books = bookDAO.getAllBooks();
+            for (Book book : books) {
+                System.out.println(book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void searchBook() {
+        try {
+            System.out.print("Enter book titre or author name : ");
+            String string = scanner.nextLine();
+
+            List<Book> books = bookDAO.searchByBookOrAuthor(string);
             for (Book book : books) {
                 System.out.println(book);
             }
