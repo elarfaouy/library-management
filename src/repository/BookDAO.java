@@ -36,6 +36,7 @@ public class BookDAO {
             // TODO : when complete author dao, I need to get object of author for that id
             int author_id = resultSet.getInt(6);
             Author author = new Author();
+            author.setId(author_id);
 
             return new Book(isbn, title, status, quantity, quantityLost, author);
         }
@@ -62,6 +63,7 @@ public class BookDAO {
             // TODO : when complete author dao, I need to get object of author for that id
             int author_id = resultSet.getInt(6);
             Author author = new Author();
+            author.setId(author_id);
 
             Book book = new Book(isbn, title, status, quantity, quantityLost, author);
 
@@ -72,7 +74,7 @@ public class BookDAO {
     }
 
     public Book insert(Book book) throws SQLException {
-        String query = "INSERT INTO books (isbn, title, status, quantity, quantity_lost, author_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO books VALUES (?, ?, ?, ?, ?, ?)";
 
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, book.getIsbn());

@@ -18,7 +18,7 @@ public class BookService {
         this.bookDAO = new BookDAO(connection);
     }
 
-    public void BookMenu() throws SQLException {
+    public void BookMenu() {
 
         while (true) {
             System.out.println("Library Management System");
@@ -29,7 +29,7 @@ public class BookService {
             System.out.println("5. Exit");
             System.out.print("Enter your choice: ");
 
-            int choice = scanner.nextInt();
+            int choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
                 case 1:
@@ -99,42 +99,38 @@ public class BookService {
         }
     }
 
-    public void updateBook() throws SQLException {
+    public void updateBook() {
         System.out.print("Enter ISBN of the book to update: ");
-        String isbnn = scanner.nextLine();
         String isbn = scanner.nextLine();
 
-        // Check if the book exists in the database
-        Book existingBook = bookDAO.getBookByISBN(isbn);
-        if (existingBook == null) {
-            System.out.println("Book with ISBN " + isbn + " not found.");
-            return;
-        }
-
-        System.out.print("Enter new title (leave empty to keep existing): ");
-        String title = scanner.nextLine();
-        if (title.isEmpty()) {
-            title = existingBook.getTitle();
-        }
-
-        System.out.print("Enter new status (available/on loan/lost, leave empty to keep existing): ");
-        String statusStr = scanner.nextLine();
-        BookStatus status = statusStr.isEmpty() ? existingBook.getStatus() : BookStatus.fromString(statusStr);
-
-        System.out.print("Enter new quantity (leave empty to keep existing): ");
-        String quantityStr = scanner.nextLine();
-        int quantity = quantityStr.isEmpty() ? existingBook.getQuantity() : Integer.parseInt(quantityStr);
-
-        System.out.print("Enter new quantity lost (leave empty to keep existing): ");
-        String quantityLostStr = scanner.nextLine();
-        int quantityLost = quantityLostStr.isEmpty() ? existingBook.getQuantityLost() : Integer.parseInt(quantityLostStr);
-
-        // TODO : Author author = createAuthor();
-        Author author = new Author(1, "", "");
-
-        Book updatedBook = new Book(isbn, title, status, quantity, quantityLost, author);
-
         try {
+            Book existingBook = bookDAO.getBookByISBN(isbn);
+            if (existingBook == null) {
+                System.out.println("Book with ISBN " + isbn + " not found.");
+                return;
+            }
+
+            System.out.print("Enter new title (leave empty to keep existing): ");
+            String title = scanner.nextLine();
+            title = title.isEmpty() ? existingBook.getTitle() : title;
+
+            System.out.print("Enter new status (available/on loan/lost, leave empty to keep existing): ");
+            String statusStr = scanner.nextLine();
+            BookStatus status = statusStr.isEmpty() ? existingBook.getStatus() : BookStatus.fromString(statusStr);
+
+            System.out.print("Enter new quantity (leave empty to keep existing): ");
+            String quantityStr = scanner.nextLine();
+            int quantity = quantityStr.isEmpty() ? existingBook.getQuantity() : Integer.parseInt(quantityStr);
+
+            System.out.print("Enter new quantity lost (leave empty to keep existing): ");
+            String quantityLostStr = scanner.nextLine();
+            int quantityLost = quantityLostStr.isEmpty() ? existingBook.getQuantityLost() : Integer.parseInt(quantityLostStr);
+
+            // TODO : Author author = createAuthor();
+            Author author = new Author(1, "", "");
+
+            Book updatedBook = new Book(isbn, title, status, quantity, quantityLost, author);
+
             Book result = bookDAO.update(updatedBook);
             if (result != null) {
                 System.out.println("Book updated successfully: " + result);
