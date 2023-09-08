@@ -1,4 +1,5 @@
 import service.BookService;
+import service.BorrowedBookService;
 import util.DatabaseConnection;
 
 import java.sql.Connection;
@@ -9,7 +10,10 @@ public class Main {
 
         Connection connection = DatabaseConnection.getConnection();
 
-        BookService bookService = new BookService(connection);
-        bookService.BookMenu();
+//        BookService bookService = new BookService(connection);
+//        bookService.BookMenu();
+
+        BorrowedBookService borrowedBookService = new BorrowedBookService(connection);
+        borrowedBookService.BorrowMenu();
     }
 }

@@ -18,15 +18,14 @@ public class BookDAO {
         this.connection = connection;
     }
 
-    public Book getBookByISBN(String ISBN) throws SQLException {
+    public Book getBookByISBN(String isbn) throws SQLException {
         String query = "SELECT * FROM books WHERE isbn=?";
 
         PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, ISBN);
+        preparedStatement.setString(1, isbn);
         ResultSet resultSet = preparedStatement.executeQuery();
 
         if (resultSet.next()) {
-            String isbn = resultSet.getString(1);
             String title = resultSet.getString(2);
             String statusStr = resultSet.getString(3);
             BookStatus status = BookStatus.fromString(statusStr);

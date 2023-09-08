@@ -1,8 +1,9 @@
 package domain.entities;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class BorrowedBook {
+    private int id;
     private Date borrowDate;
     private Date returnDate;
     private Date dueDate;
@@ -12,12 +13,21 @@ public class BorrowedBook {
     public BorrowedBook() {
     }
 
-    public BorrowedBook(Date borrowDate, Date returnDate, Date dueDate, Book book, Client client) {
+    public BorrowedBook(int id, Date borrowDate, Date returnDate, Date dueDate, Book book, Client client) {
+        this.id = id;
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
         this.dueDate = dueDate;
         this.book = book;
         this.client = client;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Date getBorrowDate() {
@@ -63,7 +73,8 @@ public class BorrowedBook {
     @Override
     public String toString() {
         return "domain.model.BorrowedBook{" +
-                "borrowDate=" + borrowDate +
+                "id=" + id +
+                ", borrowDate=" + borrowDate +
                 ", returnDate=" + returnDate +
                 ", dueDate=" + dueDate +
                 ", book=" + book +
