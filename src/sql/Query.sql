@@ -69,3 +69,26 @@ INSERT INTO `borrowing_transactions` (`borrow_date`, `return_date`, `due_date`, 
     ('2023-09-01', '2023-09-10', '2023-09-15', 1, 1),
     ('2023-09-02', NULL, '2023-09-20', 3, 2),
     ('2023-09-03', NULL, '2023-09-18', 4, 3);
+
+
+DELIMITER //
+
+CREATE PROCEDURE isAnyCopyExistss(
+    IN isbnParam VARCHAR(50),
+    OUT idCopyAvailable INT
+)
+BEGIN
+    DECLARE copy_id INT;
+
+    SELECT c.id INTO copy_id 
+    FROM book_copies AS c
+    INNER JOIN books AS b ON c.book_id = b.id
+    WHERE b.isbn = isbnParam AND c.`status` = 'available'
+    LIMIT 1;
+    
+    SET idCopyAvailable = copy_id;
+END;
+
+//
+
+DELIMITER ;
