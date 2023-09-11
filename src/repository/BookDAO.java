@@ -19,7 +19,7 @@ public class BookDAO implements BaseDAO<Book> {
 
     @Override
     public Book insert(Book entity) throws SQLException {
-        String query = "INSERT INTO books VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO books (`isbn`, `title`, `quantity`, `author_id`) VALUES (?, ?, ?, ?)";
 
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, entity.getIsbn());
@@ -114,5 +114,37 @@ public class BookDAO implements BaseDAO<Book> {
         }
 
         return null;
+    }
+
+    public List<Book> searchByBookOrAuthor(String string) throws SQLException {
+        List<Book> books = new ArrayList<>();
+
+        String query = "SELECT b.* " +
+                "FROM books AS b " +
+                "INNER JOIN authors AS a " +
+                "ON b.author_id = a.id " +
+                "WHERE b.title LIKE ?" +
+                "OR CONCAT(a.name, a.surname) LIKE ?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, "%" + string + "%");
+        preparedStatement.setString(2, "%" + string + "%");
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            int id = resultSet.getInt(1);
+            String isbn = resultSet.getString(2);
+            String title = resultSet.getString(3);
+            int quantity = resultSet.getInt(4);
+            int author_id = resultSet.getInt(5);
+
+            Author author = new AuthorDAO(connection).getById(author_id);
+
+            Book book = new Book(id, isbn, title, quantity, author);
+
+            books.add(book);
+        }
+
+        return books;
     }
 }

@@ -25,4 +25,9 @@ public class BookCopyDAO implements BaseDAO<BookCopy> {
     public List<BookCopy> getAll() throws SQLException {
         return null;
     }
+
+    @Override
+    public BookCopy getById(int id) throws SQLException {
+        return null;
+    }
 }
