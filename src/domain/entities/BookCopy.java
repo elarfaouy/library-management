@@ -5,16 +5,16 @@ import domain.enums.BookStatus;
 public class BookCopy {
     private int id;
     private int serial;
-    private BookStatus bookStatus;
+    private BookStatus status;
     private Book book;
 
     public BookCopy() {
     }
 
-    public BookCopy(int id, int serial, BookStatus bookStatus, Book book) {
+    public BookCopy(int id, int serial, BookStatus status, Book book) {
         this.id = id;
         this.serial = serial;
-        this.bookStatus = bookStatus;
+        this.status = status;
         this.book = book;
     }
 
@@ -34,12 +34,12 @@ public class BookCopy {
         this.serial = serial;
     }
 
-    public BookStatus getBookStatus() {
-        return bookStatus;
+    public BookStatus getStatus() {
+        return status;
     }
 
-    public void setBookStatus(BookStatus bookStatus) {
-        this.bookStatus = bookStatus;
+    public void setStatus(BookStatus status) {
+        this.status = status;
     }
 
     public Book getBook() {
@@ -55,7 +55,7 @@ public class BookCopy {
         return "BookCopy{" +
                 "id=" + id +
                 ", serial=" + serial +
-                ", bookStatus=" + bookStatus +
+                ", bookStatus=" + status +
                 ", book=" + book +
                 '}';
     }

@@ -147,4 +147,25 @@ public class BookDAO implements BaseDAO<Book> {
 
         return books;
     }
+
+    public Book getByIsbn(String isbn) throws SQLException {
+        String query = "SELECT * FROM books WHERE isbn=?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, isbn);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            int id = resultSet.getInt(1);
+            String title = resultSet.getString(3);
+            int quantity = resultSet.getInt(4);
+            int author_id = resultSet.getInt(5);
+
+            Author author = new AuthorDAO(connection).getById(author_id);
+
+            return new Book(id, isbn, title, quantity, author);
+        }
+
+        return null;
+    }
 }
