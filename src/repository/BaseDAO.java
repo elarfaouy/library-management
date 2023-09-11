@@ -11,4 +11,6 @@ public interface BaseDAO<T> {
     boolean delete(int id) throws SQLException;
 
     List<T> getAll() throws SQLException;
+
+    T getById(int id) throws SQLException;
 }
