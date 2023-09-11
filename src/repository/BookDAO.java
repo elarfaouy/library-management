@@ -2,7 +2,6 @@ package repository;
 
 import domain.entities.Author;
 import domain.entities.Book;
-import domain.enums.BookStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,39 +10,66 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookDAO {
+public class BookDAO implements BaseDAO<Book> {
     private final Connection connection;
 
     public BookDAO(Connection connection) {
         this.connection = connection;
     }
 
-    public Book getBookByISBN(String isbn) throws SQLException {
-        String query = "SELECT * FROM books WHERE isbn=?";
+    @Override
+    public Book insert(Book entity) throws SQLException {
+        String query = "INSERT INTO books (`isbn`, `title`, `quantity`, `author_id`) VALUES (?, ?, ?, ?)";
 
         PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, isbn);
-        ResultSet resultSet = preparedStatement.executeQuery();
+        preparedStatement.setString(1, entity.getIsbn());
+        preparedStatement.setString(2, entity.getTitle());
+        preparedStatement.setInt(3, entity.getQuantity());
+        preparedStatement.setInt(4, entity.getAuthor().getId());
 
-        if (resultSet.next()) {
-            String title = resultSet.getString(2);
-            String statusStr = resultSet.getString(3);
-            BookStatus status = BookStatus.fromString(statusStr);
-            int quantity = resultSet.getInt(4);
-            int quantityLost = resultSet.getInt(5);
+        int rowsAffected = preparedStatement.executeUpdate();
 
-            // TODO : when complete author dao, I need to get object of author for that id
-            int author_id = resultSet.getInt(6);
-            Author author = new Author();
-            author.setId(author_id);
-
-            return new Book(isbn, title, status, quantity, quantityLost, author);
+        if (rowsAffected == 1) {
+            return entity;
         }
 
         return null;
     }
 
-    public List<Book> getAllBooks() throws SQLException {
+    @Override
+    public Book update(Book entity) throws SQLException {
+        String query = "UPDATE books SET isbn=?, title=?, quantity=?, author_id=? WHERE id=?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, entity.getIsbn());
+        preparedStatement.setString(2, entity.getTitle());
+        preparedStatement.setInt(3, entity.getQuantity());
+        preparedStatement.setInt(4, entity.getAuthor().getId());
+        preparedStatement.setInt(5, entity.getId());
+
+        int rowsAffected = preparedStatement.executeUpdate();
+
+        if (rowsAffected == 1) {
+            return entity;
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean delete(int id) throws SQLException {
+        String query = "DELETE FROM books WHERE id=?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+
+        int rowsAffected = preparedStatement.executeUpdate();
+
+        return rowsAffected == 1;
+    }
+
+    @Override
+    public List<Book> getAll() throws SQLException {
         List<Book> books = new ArrayList<>();
 
         String query = "SELECT * FROM books";
@@ -52,19 +78,15 @@ public class BookDAO {
         ResultSet resultSet = preparedStatement.executeQuery();
 
         while (resultSet.next()) {
-            String isbn = resultSet.getString(1);
-            String title = resultSet.getString(2);
-            String statusStr = resultSet.getString(3);
-            BookStatus status = BookStatus.fromString(statusStr);
+            int id = resultSet.getInt(1);
+            String isbn = resultSet.getString(2);
+            String title = resultSet.getString(3);
             int quantity = resultSet.getInt(4);
-            int quantityLost = resultSet.getInt(5);
+            int author_id = resultSet.getInt(5);
 
-            // TODO : when complete author dao, I need to get object of author for that id
-            int author_id = resultSet.getInt(6);
-            Author author = new Author();
-            author.setId(author_id);
+            Author author = new AuthorDAO(connection).getById(author_id);
 
-            Book book = new Book(isbn, title, status, quantity, quantityLost, author);
+            Book book = new Book(id, isbn, title, quantity, author);
 
             books.add(book);
         }
@@ -72,55 +94,26 @@ public class BookDAO {
         return books;
     }
 
-    public Book insert(Book book) throws SQLException {
-        String query = "INSERT INTO books VALUES (?, ?, ?, ?, ?, ?)";
+    @Override
+    public Book getById(int id) throws SQLException {
+        String query = "SELECT * FROM books WHERE id=?";
 
         PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, book.getIsbn());
-        preparedStatement.setString(2, book.getTitle());
-        preparedStatement.setString(3, book.getStatus().toString());
-        preparedStatement.setInt(4, book.getQuantity());
-        preparedStatement.setInt(5, book.getQuantityLost());
-        preparedStatement.setInt(6, book.getAuthor().getId());
+        preparedStatement.setInt(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
 
-        int rowsAffected = preparedStatement.executeUpdate();
+        if (resultSet.next()) {
+            String isbn = resultSet.getString(2);
+            String title = resultSet.getString(3);
+            int quantity = resultSet.getInt(4);
+            int author_id = resultSet.getInt(5);
 
-        if (rowsAffected == 1) {
-            return book;
+            Author author = new AuthorDAO(connection).getById(author_id);
+
+            return new Book(id, isbn, title, quantity, author);
         }
 
         return null;
-    }
-
-    public Book update(Book book) throws SQLException {
-        String query = "UPDATE books SET title=?, status=?, quantity=?, quantity_lost=?, author_id=? WHERE isbn=?";
-
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, book.getTitle());
-        preparedStatement.setString(2, book.getStatus().toString());
-        preparedStatement.setInt(3, book.getQuantity());
-        preparedStatement.setInt(4, book.getQuantityLost());
-        preparedStatement.setInt(5, book.getAuthor().getId());
-        preparedStatement.setString(6, book.getIsbn());
-
-        int rowsAffected = preparedStatement.executeUpdate();
-
-        if (rowsAffected == 1) {
-            return book;
-        }
-
-        return null;
-    }
-
-    public boolean delete(String isbn) throws SQLException {
-        String query = "DELETE FROM books WHERE isbn=?";
-
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, isbn);
-
-        int rowsAffected = preparedStatement.executeUpdate();
-
-        return rowsAffected == 1;
     }
 
     public List<Book> searchByBookOrAuthor(String string) throws SQLException {
@@ -139,23 +132,40 @@ public class BookDAO {
         ResultSet resultSet = preparedStatement.executeQuery();
 
         while (resultSet.next()) {
-            String isbn = resultSet.getString(1);
-            String title = resultSet.getString(2);
-            String statusStr = resultSet.getString(3);
-            BookStatus status = BookStatus.fromString(statusStr);
+            int id = resultSet.getInt(1);
+            String isbn = resultSet.getString(2);
+            String title = resultSet.getString(3);
             int quantity = resultSet.getInt(4);
-            int quantityLost = resultSet.getInt(5);
+            int author_id = resultSet.getInt(5);
 
-            // TODO : when complete author dao, I need to get object of author for that id
-            int author_id = resultSet.getInt(6);
-            Author author = new Author();
-            author.setId(author_id);
+            Author author = new AuthorDAO(connection).getById(author_id);
 
-            Book book = new Book(isbn, title, status, quantity, quantityLost, author);
+            Book book = new Book(id, isbn, title, quantity, author);
 
             books.add(book);
         }
 
         return books;
+    }
+
+    public Book getByIsbn(String isbn) throws SQLException {
+        String query = "SELECT * FROM books WHERE isbn=?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, isbn);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            int id = resultSet.getInt(1);
+            String title = resultSet.getString(3);
+            int quantity = resultSet.getInt(4);
+            int author_id = resultSet.getInt(5);
+
+            Author author = new AuthorDAO(connection).getById(author_id);
+
+            return new Book(id, isbn, title, quantity, author);
+        }
+
+        return null;
     }
 }
