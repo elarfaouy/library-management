@@ -1,11 +1,11 @@
 package service;
 
 import domain.entities.Book;
-import domain.entities.BorrowedBook;
+import domain.entities.BorrowingTransaction;
 import domain.entities.Client;
 import domain.enums.BookStatus;
 import repository.BookDAO;
-import repository.BorrowedBookDAO;
+import repository.BorrowingTransactionDAO;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -15,11 +15,11 @@ import java.util.Scanner;
 
 public class BorrowedBookService {
     Scanner scanner = new Scanner(System.in);
-    private final BorrowedBookDAO borrowedBookDAO;
+    private final BorrowingTransactionDAO borrowingTransactionDAO;
     private final BookDAO bookDAO;
 
     public BorrowedBookService(Connection connection) {
-        this.borrowedBookDAO = new BorrowedBookDAO(connection);
+        this.borrowingTransactionDAO = new BorrowingTransactionDAO(connection);
         this.bookDAO = new BookDAO(connection);
     }
 
@@ -74,18 +74,18 @@ public class BorrowedBookService {
                 calendar.add(Calendar.DAY_OF_MONTH, numberOfDaysToBorrow);
                 Date dueDate = new Date(calendar.getTime().getTime());
 
-                BorrowedBook borrowedBook = new BorrowedBook();
-                borrowedBook.setBook(borrowBook);
-                borrowedBook.setClient(client);
-                borrowedBook.setBorrowDate(borrowDate);
-                borrowedBook.setDueDate(dueDate);
+                BorrowingTransaction borrowingTransaction = new BorrowingTransaction();
+                borrowingTransaction.setBook(borrowBook);
+                borrowingTransaction.setClient(client);
+                borrowingTransaction.setBorrowDate(borrowDate);
+                borrowingTransaction.setDueDate(dueDate);
 
-                BorrowedBook borrow = borrowedBookDAO.borrowBook(borrowedBook);
+                BorrowingTransaction borrow = borrowingTransactionDAO.borrowBook(borrowingTransaction);
                 borrowBook.setStatus(BookStatus.ON_LOAN);
                 Book updateBook = bookDAO.update(borrowBook);
 
                 if (updateBook != null && borrow != null) {
-                    System.out.println("Book borrowed successfully: " + borrowedBook);
+                    System.out.println("Book borrowed successfully: " + borrowingTransaction);
                 } else {
                     System.out.println("Failed to borrowed book.");
                 }
@@ -102,8 +102,8 @@ public class BorrowedBookService {
         int id = Integer.parseInt(scanner.nextLine());
 
         try {
-            BorrowedBook borrowedBook = borrowedBookDAO.getBorrowedBookById(id);
-            if (borrowedBook == null) {
+            BorrowingTransaction borrowingTransaction = borrowingTransactionDAO.getBorrowedBookById(id);
+            if (borrowingTransaction == null) {
                 System.out.println("Borrowing with id " + id + " not found.");
                 return;
             }
@@ -111,15 +111,15 @@ public class BorrowedBookService {
             Calendar calendar = Calendar.getInstance();
             Date returnDate = new Date(calendar.getTime().getTime());
 
-            borrowedBook.setReturnDate(returnDate);
-            Boolean borrow = borrowedBookDAO.returnBook(borrowedBook);
+            borrowingTransaction.setReturnDate(returnDate);
+            Boolean borrow = borrowingTransactionDAO.returnBook(borrowingTransaction);
 
-            Book book = borrowedBook.getBook();
+            Book book = borrowingTransaction.getBook();
             book.setStatus(BookStatus.AVAILABLE);
             Book updateBook = bookDAO.update(book);
 
             if (updateBook != null && borrow) {
-                System.out.println("Book returned successfully: " + borrowedBook);
+                System.out.println("Book returned successfully: " + borrowingTransaction);
             } else {
                 System.out.println("Failed to return book.");
             }

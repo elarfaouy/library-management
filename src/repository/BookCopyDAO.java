@@ -1,18 +1,18 @@
 package repository;
 
-import domain.entities.Book;
+import domain.entities.BookCopy;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class BookDAO implements BaseDAO<Book> {
+public class BookCopyDAO implements BaseDAO<BookCopy> {
     @Override
-    public Book insert(Book entity) throws SQLException {
+    public BookCopy insert(BookCopy entity) throws SQLException {
         return null;
     }
 
     @Override
-    public Book update(Book entity) throws SQLException {
+    public BookCopy update(BookCopy entity) throws SQLException {
         return null;
     }
 
@@ -22,7 +22,7 @@ public class BookDAO implements BaseDAO<Book> {
     }
 
     @Override
-    public List<Book> getAll() throws SQLException {
+    public List<BookCopy> getAll() throws SQLException {
         return null;
     }
 }
