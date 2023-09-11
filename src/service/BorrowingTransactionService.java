@@ -1,11 +1,14 @@
 package service;
 
 import domain.entities.Book;
-import domain.entities.BorrowedBook;
+import domain.entities.BookCopy;
+import domain.entities.BorrowingTransaction;
 import domain.entities.Client;
 import domain.enums.BookStatus;
+import repository.BookCopyDAO;
 import repository.BookDAO;
-import repository.BorrowedBookDAO;
+import repository.BorrowingTransactionDAO;
+import repository.ClientDAO;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -13,14 +16,18 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Scanner;
 
-public class BorrowedBookService {
+public class BorrowingTransactionService {
     Scanner scanner = new Scanner(System.in);
-    private final BorrowedBookDAO borrowedBookDAO;
+    private final BorrowingTransactionDAO borrowingTransactionDAO;
     private final BookDAO bookDAO;
+    private final ClientDAO clientDAO;
+    private final BookCopyDAO bookCopyDAO;
 
-    public BorrowedBookService(Connection connection) {
-        this.borrowedBookDAO = new BorrowedBookDAO(connection);
+    public BorrowingTransactionService(Connection connection) {
+        this.borrowingTransactionDAO = new BorrowingTransactionDAO(connection);
         this.bookDAO = new BookDAO(connection);
+        this.clientDAO = new ClientDAO(connection);
+        this.bookCopyDAO = new BookCopyDAO(connection);
     }
 
     public void BorrowMenu() {
@@ -55,16 +62,20 @@ public class BorrowedBookService {
         String isbn = scanner.nextLine();
 
         try {
-            Book borrowBook = bookDAO.getBookByISBN(isbn);
+            Book borrowBook = bookDAO.getByIsbn(isbn);
             if (borrowBook == null) {
                 System.out.println("Book with ISBN " + isbn + " not found.");
                 return;
             }
 
-            if (borrowBook.getStatus() == BookStatus.AVAILABLE) {
+            int bookCopyId = bookCopyDAO.getCopyAvailable(isbn);
+            if (bookCopyId != 0) {
+                BookCopy bookCopy = bookCopyDAO.getById(bookCopyId);
+
                 System.out.print("Enter id of the client to borrow: ");
                 int client_id = Integer.parseInt(scanner.nextLine());
-                Client client = new Client(client_id, "", "");
+
+                Client client = clientDAO.getById(client_id);
 
                 System.out.print("Enter the number of days to borrow: ");
                 int numberOfDaysToBorrow = Integer.parseInt(scanner.nextLine());
@@ -74,18 +85,18 @@ public class BorrowedBookService {
                 calendar.add(Calendar.DAY_OF_MONTH, numberOfDaysToBorrow);
                 Date dueDate = new Date(calendar.getTime().getTime());
 
-                BorrowedBook borrowedBook = new BorrowedBook();
-                borrowedBook.setBook(borrowBook);
-                borrowedBook.setClient(client);
-                borrowedBook.setBorrowDate(borrowDate);
-                borrowedBook.setDueDate(dueDate);
+                BorrowingTransaction borrowingTransaction = new BorrowingTransaction();
+                borrowingTransaction.setBookCopy(bookCopy);
+                borrowingTransaction.setClient(client);
+                borrowingTransaction.setBorrowDate(borrowDate);
+                borrowingTransaction.setDueDate(dueDate);
 
-                BorrowedBook borrow = borrowedBookDAO.borrowBook(borrowedBook);
-                borrowBook.setStatus(BookStatus.ON_LOAN);
-                Book updateBook = bookDAO.update(borrowBook);
+                BorrowingTransaction borrow = borrowingTransactionDAO.insert(borrowingTransaction);
+                bookCopy.setStatus(BookStatus.ON_LOAN);
+                BookCopy updateBookCopy = bookCopyDAO.update(bookCopy);
 
-                if (updateBook != null && borrow != null) {
-                    System.out.println("Book borrowed successfully: " + borrowedBook);
+                if (updateBookCopy != null && borrow != null) {
+                    System.out.println("Book borrowed successfully: " + borrowingTransaction);
                 } else {
                     System.out.println("Failed to borrowed book.");
                 }
@@ -98,12 +109,12 @@ public class BorrowedBookService {
     }
 
     public void returnBook() {
-        System.out.print("Enter id of the borrowing: ");
+        System.out.print("Enter id of the borrowing transaction: ");
         int id = Integer.parseInt(scanner.nextLine());
 
         try {
-            BorrowedBook borrowedBook = borrowedBookDAO.getBorrowedBookById(id);
-            if (borrowedBook == null) {
+            BorrowingTransaction borrowingTransaction = borrowingTransactionDAO.getById(id);
+            if (borrowingTransaction == null) {
                 System.out.println("Borrowing with id " + id + " not found.");
                 return;
             }
@@ -111,15 +122,15 @@ public class BorrowedBookService {
             Calendar calendar = Calendar.getInstance();
             Date returnDate = new Date(calendar.getTime().getTime());
 
-            borrowedBook.setReturnDate(returnDate);
-            Boolean borrow = borrowedBookDAO.returnBook(borrowedBook);
+            borrowingTransaction.setReturnDate(returnDate);
+            BorrowingTransaction returnBook = borrowingTransactionDAO.update(borrowingTransaction);
 
-            Book book = borrowedBook.getBook();
-            book.setStatus(BookStatus.AVAILABLE);
-            Book updateBook = bookDAO.update(book);
+            BookCopy bookCopy = borrowingTransaction.getBookCopy();
+            bookCopy.setStatus(BookStatus.AVAILABLE);
+            BookCopy updateBook = bookCopyDAO.update(bookCopy);
 
-            if (updateBook != null && borrow) {
-                System.out.println("Book returned successfully: " + borrowedBook);
+            if (updateBook != null && returnBook != null) {
+                System.out.println("Book returned successfully: " + borrowingTransaction);
             } else {
                 System.out.println("Failed to return book.");
             }

@@ -15,58 +15,57 @@ CREATE TABLE clients (
 );
 
 CREATE TABLE books (
-	isbn VARCHAR(100) PRIMARY KEY,
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	isbn VARCHAR(100) UNIQUE,
 	title VARCHAR(250) NOT NULL,
-	status ENUM('available', 'on loan', 'lost') NOT NULL,
 	quantity INT,
-	quantity_lost INT,
 	author_id INT,
 	FOREIGN KEY (author_id) REFERENCES authors(id)
 );
 
-CREATE TABLE borrowed_books (
+CREATE TABLE book_copies (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	serial INT,
+	status ENUM('available', 'on loan', 'lost') NOT NULL,
+	book_id INT,
+	FOREIGN KEY (book_id) REFERENCES books(id)
+);
+
+CREATE TABLE borrowing_transactions (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	borrow_date DATE NOT NULL,
 	return_date DATE,
 	due_date DATE NOT NULL,
-	book_isbn VARCHAR(100),
+	book_copy_id INT,
 	client_id INT,
-	FOREIGN KEY (book_isbn) REFERENCES books(isbn),
+	FOREIGN KEY (book_copy_id) REFERENCES book_copies(id),
 	FOREIGN KEY (client_id) REFERENCES clients(id)
 );
 
 
-INSERT INTO authors (name, surname) VALUES
+INSERT INTO `authors` (`name`, `surname`) VALUES
     ('John', 'Doe'),
     ('Jane', 'Smith'),
-    ('David', 'Johnson'),
-    ('Mary', 'Johnson'),
-    ('Michael', 'Brown'),
-    ('Sarah', 'Smith');
+    ('Michael', 'Johnson');
 
-INSERT INTO clients (name, surname) VALUES
+INSERT INTO `clients` (`name`, `surname`) VALUES
     ('Alice', 'Johnson'),
     ('Bob', 'Smith'),
-    ('Eve', 'Davis'),
-    ('Charlie', 'Davis'),
-    ('Emma', 'Wilson'),
-    ('James', 'Anderson');
+    ('Eva', 'Davis');
 
-INSERT INTO books (isbn, title, status, quantity, quantity_lost, author_id) VALUES
-    ('ISBN-001', 'The domain.entities.Book of Java', 'available', 50, 0, 1),
-    ('ISBN-002', 'Python Programming', 'on loan', 30, 5, 2),
-    ('ISBN-003', 'SQL Mastery', 'available', 20, 0, 3),
-    ('ISBN-004', 'JavaScript Essentials', 'lost', 10, 2, 1),
-    ('ISBN-005', 'The Art of Programming', 'available', 15, 1, 4),
-    ('ISBN-006', 'Data Science Fundamentals', 'available', 25, 0, 5),
-    ('ISBN-007', 'Web Development Basics', 'on loan', 10, 3, 6),
-    ('ISBN-008', 'Machine Learning Essentials', 'available', 18, 0, 4);
+INSERT INTO `books` (`isbn`, `title`, `quantity`, `author_id`) VALUES
+    ('978-0451524935', 'Pride and Prejudice', 5, 2),
+    ('978-1984801814', '1984', 3, 3),
+    ('978-0061120084', 'To Kill a Mockingbird', 4, 1);
 
-INSERT INTO borrowed_books (borrow_date, return_date, due_date, book_isbn, client_id) VALUES
-    ('2023-09-01', '2023-09-10', '2023-09-15', 'ISBN-002', 1),
-    ('2023-09-02', '2023-09-11', '2023-09-16', 'ISBN-001', 2),
-    ('2023-09-03', NULL, '2023-09-14', 'ISBN-003', 3),
-    ('2023-09-04', '2023-09-13', '2023-09-18', 'ISBN-005', 4),
-    ('2023-09-05', NULL, '2023-09-15', 'ISBN-007', 5),
-    ('2023-09-06', '2023-09-16', '2023-09-20', 'ISBN-008', 6),
-    ('2023-09-07', NULL, '2023-09-17', 'ISBN-006', 4);
+INSERT INTO `book_copies` (`serial`, `status`, `book_id`) VALUES
+    (1, 'available', 1),
+    (2, 'available', 1),
+    (3, 'on loan', 2),
+    (4, 'available', 3),
+    (5, 'available', 3);
+
+INSERT INTO `borrowing_transactions` (`borrow_date`, `return_date`, `due_date`, `book_copy_id`, `client_id`) VALUES
+    ('2023-09-01', '2023-09-10', '2023-09-15', 1, 1),
+    ('2023-09-02', NULL, '2023-09-20', 3, 2),
+    ('2023-09-03', NULL, '2023-09-18', 4, 3);

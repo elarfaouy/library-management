@@ -2,23 +2,23 @@ package domain.entities;
 
 import java.sql.Date;
 
-public class BorrowedBook {
+public class BorrowingTransaction {
     private int id;
     private Date borrowDate;
     private Date returnDate;
     private Date dueDate;
-    private Book book;
+    private BookCopy bookCopy;
     private Client client;
 
-    public BorrowedBook() {
+    public BorrowingTransaction() {
     }
 
-    public BorrowedBook(int id, Date borrowDate, Date returnDate, Date dueDate, Book book, Client client) {
+    public BorrowingTransaction(int id, Date borrowDate, Date returnDate, Date dueDate, BookCopy bookCopy, Client client) {
         this.id = id;
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
         this.dueDate = dueDate;
-        this.book = book;
+        this.bookCopy = bookCopy;
         this.client = client;
     }
 
@@ -54,12 +54,12 @@ public class BorrowedBook {
         this.dueDate = dueDate;
     }
 
-    public Book getBook() {
-        return book;
+    public BookCopy getBookCopy() {
+        return bookCopy;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
+    public void setBookCopy(BookCopy bookCopy) {
+        this.bookCopy = bookCopy;
     }
 
     public Client getClient() {
@@ -72,12 +72,12 @@ public class BorrowedBook {
 
     @Override
     public String toString() {
-        return "domain.model.BorrowedBook{" +
+        return "BorrowingTransaction{" +
                 "id=" + id +
                 ", borrowDate=" + borrowDate +
                 ", returnDate=" + returnDate +
                 ", dueDate=" + dueDate +
-                ", book=" + book +
+                ", bookCopy=" + bookCopy +
                 ", client=" + client +
                 '}';
     }
