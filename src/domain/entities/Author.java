@@ -42,7 +42,7 @@ public class Author {
 
     @Override
     public String toString() {
-        return "domain.model.Author{" +
+        return "Author{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +

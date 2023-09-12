@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Scanner;
 
 public class BorrowingTransactionService {
@@ -34,8 +35,9 @@ public class BorrowingTransactionService {
 
         while (true) {
             System.out.println("\n**************************************");
-            System.out.println("1. Borrow a Book");
-            System.out.println("2. Return a Book");
+            System.out.println("1. Get all Transactions");
+            System.out.println("2. Borrow a Book");
+            System.out.println("3. Return a Book");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
@@ -45,9 +47,12 @@ public class BorrowingTransactionService {
 
             switch (choice) {
                 case 1:
-                    borrowBook();
+                    listAllTransactions();
                     break;
                 case 2:
+                    borrowBook();
+                    break;
+                case 3:
                     returnBook();
                     break;
                 case 0:
@@ -56,6 +61,17 @@ public class BorrowingTransactionService {
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
+        }
+    }
+
+    public void listAllTransactions() {
+        try {
+            List<BorrowingTransaction> borrowingTransactionList = borrowingTransactionDAO.getAll();
+            for (BorrowingTransaction borrowingTransaction : borrowingTransactionList) {
+                System.out.println(borrowingTransaction);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

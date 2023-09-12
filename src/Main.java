@@ -1,6 +1,4 @@
-import service.BookService;
-import service.BorrowingTransactionService;
-import service.ReportService;
+import service.*;
 import util.DatabaseConnection;
 
 import java.sql.Connection;
@@ -12,9 +10,9 @@ public class Main {
         Connection connection = DatabaseConnection.getConnection();
 
         BookService bookService = new BookService(connection);
-//        AuthorService authorService = new AuthorService(connection);
+        AuthorService authorService = new AuthorService(connection);
         BorrowingTransactionService borrowingTransactionService = new BorrowingTransactionService(connection);
-//        ClientService clientService = new ClientService(connection);
+        ClientService clientService = new ClientService(connection);
         ReportService reportService = new ReportService(connection);
 
         Scanner scanner = new Scanner(System.in);
@@ -38,13 +36,13 @@ public class Main {
                     bookService.BookMenu();
                     break;
                 case 2:
-//                    authorService.AuthorMenu();
+                    authorService.AuthorMenu();
                     break;
                 case 3:
                     borrowingTransactionService.BorrowMenu();
                     break;
                 case 4:
-//                    clientService.ClientMenu();
+                    clientService.ClientMenu();
                     break;
                 case 5:
                     reportService.Menu();

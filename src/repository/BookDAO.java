@@ -72,7 +72,7 @@ public class BookDAO implements BaseDAO<Book> {
     public List<Book> getAll() throws SQLException {
         List<Book> books = new ArrayList<>();
 
-        String query = "SELECT * FROM books";
+        String query = "SELECT * FROM books LIMIT 10";
 
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -124,7 +124,8 @@ public class BookDAO implements BaseDAO<Book> {
                 "INNER JOIN authors AS a " +
                 "ON b.author_id = a.id " +
                 "WHERE b.title LIKE ?" +
-                "OR CONCAT(a.name, a.surname) LIKE ?";
+                "OR CONCAT(a.name, a.surname) LIKE ?" +
+                "LIMIT 10";
 
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, "%" + string + "%");

@@ -1,12 +1,10 @@
 package repository;
 
-import domain.entities.Book;
-import domain.entities.BookCopy;
-import domain.entities.BorrowingTransaction;
-import domain.entities.Client;
+import domain.entities.*;
 import domain.enums.BookStatus;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BorrowingTransactionDAO implements BaseDAO<BorrowingTransaction> {
@@ -63,7 +61,30 @@ public class BorrowingTransactionDAO implements BaseDAO<BorrowingTransaction> {
 
     @Override
     public List<BorrowingTransaction> getAll() throws SQLException {
-        return null;
+        List<BorrowingTransaction> borrowingTransactionList = new ArrayList<>();
+
+        String query = "SELECT * FROM borrowing_transactions LIMIT 10";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            int id = resultSet.getInt(1);
+            Date borrowDate = resultSet.getDate(2);
+            Date returnDate = resultSet.getDate(3);
+            Date dueDate = resultSet.getDate(4);
+            int bookCopyId = resultSet.getInt(5);
+            int clientId = resultSet.getInt(6);
+
+            BookCopy bookCopy = new BookCopyDAO(connection).getById(bookCopyId);
+            Client client = new ClientDAO(connection).getById(clientId);
+
+            BorrowingTransaction borrowingTransaction = new BorrowingTransaction(id, borrowDate, returnDate, dueDate, bookCopy, client);
+
+            borrowingTransactionList.add(borrowingTransaction);
+        }
+
+        return borrowingTransactionList;
     }
 
     @Override
