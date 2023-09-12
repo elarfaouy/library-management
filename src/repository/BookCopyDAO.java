@@ -3,19 +3,31 @@ package repository;
 import domain.entities.Book;
 import domain.entities.BookCopy;
 import domain.enums.BookStatus;
+import util.DatabaseConnection;
 
 import java.sql.*;
 import java.util.List;
 
 public class BookCopyDAO implements BaseDAO<BookCopy> {
-    private final Connection connection;
+    private final Connection connection = DatabaseConnection.getConnection();
 
-    public BookCopyDAO(Connection connection) {
-        this.connection = connection;
+    public BookCopyDAO() {
     }
 
     @Override
     public BookCopy insert(BookCopy entity) throws SQLException {
+        String query = "INSERT INTO book_copies (`serial`, `book_id`) VALUES (?, ?)";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, entity.getSerial());
+        preparedStatement.setInt(2, entity.getBook().getId());
+
+        int rowsAffected = preparedStatement.executeUpdate();
+
+        if (rowsAffected == 1) {
+            return entity;
+        }
+
         return null;
     }
 
@@ -62,7 +74,7 @@ public class BookCopyDAO implements BaseDAO<BookCopy> {
             BookStatus status = BookStatus.fromString(statusStr);
             int book_id = resultSet.getInt(4);
 
-            Book book = new BookDAO(connection).getById(book_id);
+            Book book = new BookDAO().getById(book_id);
 
             return new BookCopy(id, serial, status, book);
         }

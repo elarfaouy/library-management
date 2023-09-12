@@ -14,38 +14,41 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Scanner;
 
 public class BorrowingTransactionService {
     Scanner scanner = new Scanner(System.in);
-    private final BorrowingTransactionDAO borrowingTransactionDAO;
-    private final BookDAO bookDAO;
-    private final ClientDAO clientDAO;
-    private final BookCopyDAO bookCopyDAO;
+    private final BorrowingTransactionDAO borrowingTransactionDAO = new BorrowingTransactionDAO();
+    private final BookDAO bookDAO = new BookDAO();
+    private final ClientDAO clientDAO = new ClientDAO();
+    private final BookCopyDAO bookCopyDAO = new BookCopyDAO();
 
-    public BorrowingTransactionService(Connection connection) {
-        this.borrowingTransactionDAO = new BorrowingTransactionDAO(connection);
-        this.bookDAO = new BookDAO(connection);
-        this.clientDAO = new ClientDAO(connection);
-        this.bookCopyDAO = new BookCopyDAO(connection);
+    public BorrowingTransactionService() {
     }
 
     public void BorrowMenu() {
 
         while (true) {
-            System.out.println("Library Management System");
-            System.out.println("1. Borrow a Book");
-            System.out.println("2. Return a Book");
+            System.out.println("\n**************************************");
+            System.out.println("1. Get all Transactions");
+            System.out.println("2. Borrow a Book");
+            System.out.println("3. Return a Book");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
             int choice = Integer.parseInt(scanner.nextLine());
 
+            System.out.println("\n######################################");
+
             switch (choice) {
                 case 1:
-                    borrowBook();
+                    listAllTransactions();
                     break;
                 case 2:
+                    borrowBook();
+                    break;
+                case 3:
                     returnBook();
                     break;
                 case 0:
@@ -54,6 +57,17 @@ public class BorrowingTransactionService {
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
+        }
+    }
+
+    public void listAllTransactions() {
+        try {
+            List<BorrowingTransaction> borrowingTransactionList = borrowingTransactionDAO.getAll();
+            for (BorrowingTransaction borrowingTransaction : borrowingTransactionList) {
+                System.out.println(borrowingTransaction);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -77,8 +91,18 @@ public class BorrowingTransactionService {
 
                 Client client = clientDAO.getById(client_id);
 
-                System.out.print("Enter the number of days to borrow: ");
+                System.out.print("Enter the number of days to borrow (max 30 days): ");
                 int numberOfDaysToBorrow = Integer.parseInt(scanner.nextLine());
+
+                if (client == null || 30 < numberOfDaysToBorrow || numberOfDaysToBorrow <= 0) {
+                    System.out.println("Invalid input. Please make sure all fields are filled correctly.");
+                    return;
+                }
+
+                if (!borrowingTransactionDAO.isClientCanBorrow(bookCopy, client)) {
+                    System.out.println("You are already borrowed this book.");
+                    return;
+                }
 
                 Calendar calendar = Calendar.getInstance();
                 Date borrowDate = new Date(calendar.getTime().getTime());
@@ -116,6 +140,11 @@ public class BorrowingTransactionService {
             BorrowingTransaction borrowingTransaction = borrowingTransactionDAO.getById(id);
             if (borrowingTransaction == null) {
                 System.out.println("Borrowing with id " + id + " not found.");
+                return;
+            }
+
+            if (borrowingTransaction.getBookCopy().getStatus() == BookStatus.AVAILABLE && borrowingTransaction.getReturnDate() != null) {
+                System.out.println("This Book already returned !.");
                 return;
             }
 

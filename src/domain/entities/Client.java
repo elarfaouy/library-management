@@ -40,7 +40,7 @@ public class Client {
 
     @Override
     public String toString() {
-        return "domain.model.Client{" +
+        return "Client{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
