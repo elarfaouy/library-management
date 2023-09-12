@@ -2,23 +2,28 @@ package service;
 
 import domain.entities.Author;
 import domain.entities.Book;
+import domain.entities.BookCopy;
 import domain.enums.BookStatus;
 import repository.AuthorDAO;
+import repository.BookCopyDAO;
 import repository.BookDAO;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class BookService {
     Scanner scanner = new Scanner(System.in);
     private final BookDAO bookDAO;
     private final AuthorDAO authorDAO;
+    private final BookCopyDAO bookCopyDAO;
 
     public BookService(Connection connection) {
         this.bookDAO = new BookDAO(connection);
         this.authorDAO = new AuthorDAO(connection);
+        this.bookCopyDAO = new BookCopyDAO(connection);
     }
 
     public void BookMenu() throws SQLException {
@@ -30,6 +35,7 @@ public class BookService {
             System.out.println("3. Update a Book");
             System.out.println("4. Delete a Book");
             System.out.println("5. Search a Book");
+            System.out.println("6. Add a Copy");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
@@ -52,6 +58,9 @@ public class BookService {
                     break;
                 case 5:
                     searchBook();
+                    break;
+                case 6:
+                    addCopy();
                     break;
                 case 0:
                     System.out.println("Exiting...");
@@ -102,6 +111,11 @@ public class BookService {
 
         Author author = authorDAO.getById(author_id);
 
+        if (!isbn.matches("\\d{2}-\\d{2}") || title.isEmpty() || quantity <= 0 || author == null) {
+            System.out.println("Invalid input. Please make sure all fields are filled correctly.");
+            return;
+        }
+
         Book newBook = new Book();
         newBook.setIsbn(isbn);
         newBook.setTitle(title);
@@ -141,17 +155,18 @@ public class BookService {
             String title = scanner.nextLine();
             title = title.isEmpty() ? existingBook.getTitle() : title;
 
-            System.out.print("Enter new quantity (leave empty to keep existing): ");
-            String quantityStr = scanner.nextLine();
-            int quantity = quantityStr.isEmpty() ? existingBook.getQuantity() : Integer.parseInt(quantityStr);
-
             System.out.print("Enter new author id (leave empty to keep existing): ");
             String authorStr = scanner.nextLine();
             int author_id = authorStr.isEmpty() ? existingBook.getAuthor().getId() : Integer.parseInt(authorStr);
 
             Author author = authorDAO.getById(author_id);
 
-            Book updatedBook = new Book(id, isbn, title, quantity, author);
+            if (!isbn.matches("\\d{2}-\\d{2}") || title.isEmpty() || author == null) {
+                System.out.println("Invalid input. Please make sure all fields are filled correctly.");
+                return;
+            }
+
+            Book updatedBook = new Book(id, isbn, title, existingBook.getQuantity(), author);
 
             Book result = bookDAO.update(updatedBook);
             if (result != null) {
@@ -177,6 +192,42 @@ public class BookService {
             } else {
                 System.out.println("Book not found or failed to delete.");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addCopy() {
+        System.out.print("Enter book ID: ");
+        int id = Integer.parseInt(scanner.nextLine());
+
+        try {
+            Book existingBook = bookDAO.getById(id);
+
+            if (existingBook == null) {
+                System.out.println("Book with id " + id + " not found.");
+                return;
+            }
+
+            System.out.print("Enter quantity of book copies to add: ");
+            int quantity = Integer.parseInt(scanner.nextLine());
+
+            if (quantity <= 0) {
+                System.out.println("Invalid input. Please make sure all fields are filled correctly.");
+                return;
+            }
+
+            for (int i = 0; i < quantity; i++) {
+                int serial = new Random().nextInt(8999) + 1000;
+
+                BookCopy bookCopy = new BookCopy();
+                bookCopy.setSerial(serial);
+                bookCopy.setBook(existingBook);
+
+                BookCopy added = bookCopyDAO.insert(bookCopy);
+            }
+
+            System.out.println(quantity + " Book copies added successfully for " + existingBook.getTitle());
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -16,6 +16,18 @@ public class BookCopyDAO implements BaseDAO<BookCopy> {
 
     @Override
     public BookCopy insert(BookCopy entity) throws SQLException {
+        String query = "INSERT INTO book_copies (`serial`, `book_id`) VALUES (?, ?)";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, entity.getSerial());
+        preparedStatement.setInt(2, entity.getBook().getId());
+
+        int rowsAffected = preparedStatement.executeUpdate();
+
+        if (rowsAffected == 1) {
+            return entity;
+        }
+
         return null;
     }
 
