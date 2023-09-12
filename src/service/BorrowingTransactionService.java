@@ -33,13 +33,15 @@ public class BorrowingTransactionService {
     public void BorrowMenu() {
 
         while (true) {
-            System.out.println("Library Management System");
+            System.out.println("\n**************************************");
             System.out.println("1. Borrow a Book");
             System.out.println("2. Return a Book");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
             int choice = Integer.parseInt(scanner.nextLine());
+
+            System.out.println("\n######################################");
 
             switch (choice) {
                 case 1:

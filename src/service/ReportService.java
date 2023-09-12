@@ -18,13 +18,15 @@ public class ReportService {
     public void Menu() throws SQLException {
 
         while (true) {
-            System.out.println("Library Management System");
+            System.out.println("\n**************************************");
             System.out.println("1. Show Report");
             System.out.println("2. later");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
             int choice = Integer.parseInt(scanner.nextLine());
+
+            System.out.println("\n######################################");
 
             switch (choice) {
                 case 1:

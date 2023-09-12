@@ -24,7 +24,7 @@ public class BookService {
     public void BookMenu() throws SQLException {
 
         while (true) {
-            System.out.println("Library Management System");
+            System.out.println("\n**************************************");
             System.out.println("1. List All Books");
             System.out.println("2. Add a Book");
             System.out.println("3. Update a Book");
@@ -34,6 +34,8 @@ public class BookService {
             System.out.print("Enter your choice: ");
 
             int choice = Integer.parseInt(scanner.nextLine());
+
+            System.out.println("\n######################################");
 
             switch (choice) {
                 case 1:
