@@ -89,4 +89,15 @@ public class BorrowingTransactionDAO implements BaseDAO<BorrowingTransaction> {
 
         return null;
     }
+
+    public boolean isClientCanBorrow(BookCopy bookCopy, Client client) throws SQLException {
+        String query = "SELECT * FROM borrowing_transactions WHERE book_copy_id=? AND client_id=? AND return_date is NULL";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, bookCopy.getId());
+        preparedStatement.setInt(2, client.getId());
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        return !resultSet.next();
+    }
 }

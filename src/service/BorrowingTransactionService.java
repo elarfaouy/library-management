@@ -79,8 +79,18 @@ public class BorrowingTransactionService {
 
                 Client client = clientDAO.getById(client_id);
 
-                System.out.print("Enter the number of days to borrow: ");
+                System.out.print("Enter the number of days to borrow (max 30 days): ");
                 int numberOfDaysToBorrow = Integer.parseInt(scanner.nextLine());
+
+                if (client == null || 30 < numberOfDaysToBorrow || numberOfDaysToBorrow <= 0) {
+                    System.out.println("Invalid input. Please make sure all fields are filled correctly.");
+                    return;
+                }
+
+                if (!borrowingTransactionDAO.isClientCanBorrow(bookCopy, client)) {
+                    System.out.println("You are already borrowed this book.");
+                    return;
+                }
 
                 Calendar calendar = Calendar.getInstance();
                 Date borrowDate = new Date(calendar.getTime().getTime());
@@ -118,6 +128,11 @@ public class BorrowingTransactionService {
             BorrowingTransaction borrowingTransaction = borrowingTransactionDAO.getById(id);
             if (borrowingTransaction == null) {
                 System.out.println("Borrowing with id " + id + " not found.");
+                return;
+            }
+
+            if (borrowingTransaction.getBookCopy().getStatus() == BookStatus.AVAILABLE && borrowingTransaction.getReturnDate() != null) {
+                System.out.println("This Book already returned !.");
                 return;
             }
 
