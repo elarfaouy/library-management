@@ -19,16 +19,12 @@ import java.util.Scanner;
 
 public class BorrowingTransactionService {
     Scanner scanner = new Scanner(System.in);
-    private final BorrowingTransactionDAO borrowingTransactionDAO;
-    private final BookDAO bookDAO;
-    private final ClientDAO clientDAO;
-    private final BookCopyDAO bookCopyDAO;
+    private final BorrowingTransactionDAO borrowingTransactionDAO = new BorrowingTransactionDAO();
+    private final BookDAO bookDAO = new BookDAO();
+    private final ClientDAO clientDAO = new ClientDAO();
+    private final BookCopyDAO bookCopyDAO = new BookCopyDAO();
 
-    public BorrowingTransactionService(Connection connection) {
-        this.borrowingTransactionDAO = new BorrowingTransactionDAO(connection);
-        this.bookDAO = new BookDAO(connection);
-        this.clientDAO = new ClientDAO(connection);
-        this.bookCopyDAO = new BookCopyDAO(connection);
+    public BorrowingTransactionService() {
     }
 
     public void BorrowMenu() {

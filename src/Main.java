@@ -7,13 +7,11 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-        Connection connection = DatabaseConnection.getConnection();
-
-        BookService bookService = new BookService(connection);
-        AuthorService authorService = new AuthorService(connection);
-        BorrowingTransactionService borrowingTransactionService = new BorrowingTransactionService(connection);
-        ClientService clientService = new ClientService(connection);
-        ReportService reportService = new ReportService(connection);
+        BookService bookService = new BookService();
+        AuthorService authorService = new AuthorService();
+        BorrowingTransactionService borrowingTransactionService = new BorrowingTransactionService();
+        ClientService clientService = new ClientService();
+        ReportService reportService = new ReportService();
 
         Scanner scanner = new Scanner(System.in);
 
@@ -49,14 +47,6 @@ public class Main {
                     break;
                 case 0:
                     System.out.println("Exiting...");
-
-                    try {
-                        if (connection != null) {
-                            connection.close();
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");

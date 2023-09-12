@@ -2,6 +2,7 @@ package repository;
 
 import domain.entities.Author;
 import domain.entities.Book;
+import util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,10 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookDAO implements BaseDAO<Book> {
-    private final Connection connection;
+    private final Connection connection = DatabaseConnection.getConnection();
 
-    public BookDAO(Connection connection) {
-        this.connection = connection;
+    public BookDAO() {
     }
 
     @Override
@@ -84,7 +84,7 @@ public class BookDAO implements BaseDAO<Book> {
             int quantity = resultSet.getInt(4);
             int author_id = resultSet.getInt(5);
 
-            Author author = new AuthorDAO(connection).getById(author_id);
+            Author author = new AuthorDAO().getById(author_id);
 
             Book book = new Book(id, isbn, title, quantity, author);
 
@@ -108,7 +108,7 @@ public class BookDAO implements BaseDAO<Book> {
             int quantity = resultSet.getInt(4);
             int author_id = resultSet.getInt(5);
 
-            Author author = new AuthorDAO(connection).getById(author_id);
+            Author author = new AuthorDAO().getById(author_id);
 
             return new Book(id, isbn, title, quantity, author);
         }
@@ -139,7 +139,7 @@ public class BookDAO implements BaseDAO<Book> {
             int quantity = resultSet.getInt(4);
             int author_id = resultSet.getInt(5);
 
-            Author author = new AuthorDAO(connection).getById(author_id);
+            Author author = new AuthorDAO().getById(author_id);
 
             Book book = new Book(id, isbn, title, quantity, author);
 
@@ -162,7 +162,7 @@ public class BookDAO implements BaseDAO<Book> {
             int quantity = resultSet.getInt(4);
             int author_id = resultSet.getInt(5);
 
-            Author author = new AuthorDAO(connection).getById(author_id);
+            Author author = new AuthorDAO().getById(author_id);
 
             return new Book(id, isbn, title, quantity, author);
         }

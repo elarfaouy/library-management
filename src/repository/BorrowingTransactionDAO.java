@@ -2,16 +2,16 @@ package repository;
 
 import domain.entities.*;
 import domain.enums.BookStatus;
+import util.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BorrowingTransactionDAO implements BaseDAO<BorrowingTransaction> {
-    private final Connection connection;
+    private final Connection connection = DatabaseConnection.getConnection();
 
-    public BorrowingTransactionDAO(Connection connection) {
-        this.connection = connection;
+    public BorrowingTransactionDAO() {
     }
 
     @Override
@@ -76,8 +76,8 @@ public class BorrowingTransactionDAO implements BaseDAO<BorrowingTransaction> {
             int bookCopyId = resultSet.getInt(5);
             int clientId = resultSet.getInt(6);
 
-            BookCopy bookCopy = new BookCopyDAO(connection).getById(bookCopyId);
-            Client client = new ClientDAO(connection).getById(clientId);
+            BookCopy bookCopy = new BookCopyDAO().getById(bookCopyId);
+            Client client = new ClientDAO().getById(clientId);
 
             BorrowingTransaction borrowingTransaction = new BorrowingTransaction(id, borrowDate, returnDate, dueDate, bookCopy, client);
 
@@ -102,8 +102,8 @@ public class BorrowingTransactionDAO implements BaseDAO<BorrowingTransaction> {
             int bookCopyId = resultSet.getInt(5);
             int clientId = resultSet.getInt(6);
 
-            BookCopy bookCopy = new BookCopyDAO(connection).getById(bookCopyId);
-            Client client = new ClientDAO(connection).getById(clientId);
+            BookCopy bookCopy = new BookCopyDAO().getById(bookCopyId);
+            Client client = new ClientDAO().getById(clientId);
 
             return new BorrowingTransaction(id, borrowDate, returnDate, dueDate, bookCopy, client);
         }

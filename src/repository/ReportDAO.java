@@ -1,5 +1,7 @@
 package repository;
 
+import util.DatabaseConnection;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,10 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReportDAO {
-    private final Connection connection;
+    private final Connection connection = DatabaseConnection.getConnection();
 
-    public ReportDAO(Connection connection) {
-        this.connection = connection;
+    public ReportDAO() {
     }
 
     public List<Integer> generateReport() throws SQLException {

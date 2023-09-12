@@ -2,6 +2,7 @@ package repository;
 
 import domain.entities.Client;
 import domain.entities.Client;
+import util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,10 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientDAO implements BaseDAO<Client> {
-    private final Connection connection;
+    private final Connection connection = DatabaseConnection.getConnection();
 
-    public ClientDAO(Connection connection) {
-        this.connection = connection;
+    public ClientDAO() {
     }
 
     @Override

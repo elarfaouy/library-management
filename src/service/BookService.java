@@ -16,14 +16,11 @@ import java.util.Scanner;
 
 public class BookService {
     Scanner scanner = new Scanner(System.in);
-    private final BookDAO bookDAO;
-    private final AuthorDAO authorDAO;
-    private final BookCopyDAO bookCopyDAO;
+    private final BookDAO bookDAO = new BookDAO();
+    private final AuthorDAO authorDAO = new AuthorDAO();
+    private final BookCopyDAO bookCopyDAO = new BookCopyDAO();
 
-    public BookService(Connection connection) {
-        this.bookDAO = new BookDAO(connection);
-        this.authorDAO = new AuthorDAO(connection);
-        this.bookCopyDAO = new BookCopyDAO(connection);
+    public BookService() {
     }
 
     public void BookMenu() throws SQLException {

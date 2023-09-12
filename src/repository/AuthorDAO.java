@@ -2,6 +2,7 @@ package repository;
 
 import domain.entities.Author;
 import domain.entities.Book;
+import util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,10 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorDAO implements BaseDAO<Author> {
-    private final Connection connection;
+    private final Connection connection = DatabaseConnection.getConnection();
 
-    public AuthorDAO(Connection connection) {
-        this.connection = connection;
+    public AuthorDAO() {
     }
 
     @Override

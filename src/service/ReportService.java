@@ -9,10 +9,9 @@ import java.util.Scanner;
 
 public class ReportService {
     Scanner scanner = new Scanner(System.in);
-    private final ReportDAO reportDAO;
+    private final ReportDAO reportDAO = new ReportDAO();
 
-    public ReportService(Connection connection) {
-        this.reportDAO = new ReportDAO(connection);
+    public ReportService() {
     }
 
     public void Menu() throws SQLException {

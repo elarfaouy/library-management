@@ -10,10 +10,9 @@ import java.util.Scanner;
 
 public class ClientService {
     Scanner scanner = new Scanner(System.in);
-    private final ClientDAO clientDAO;
+    private final ClientDAO clientDAO = new ClientDAO();
 
-    public ClientService(Connection connection) {
-        this.clientDAO = new ClientDAO(connection);
+    public ClientService() {
     }
 
     public void ClientMenu() throws SQLException {

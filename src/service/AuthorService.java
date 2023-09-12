@@ -10,10 +10,9 @@ import java.util.Scanner;
 
 public class AuthorService {
     Scanner scanner = new Scanner(System.in);
-    private final AuthorDAO authorDAO;
+    private final AuthorDAO authorDAO = new AuthorDAO();
 
-    public AuthorService(Connection connection) {
-        this.authorDAO = new AuthorDAO(connection);
+    public AuthorService() {
     }
 
     public void AuthorMenu() throws SQLException {
